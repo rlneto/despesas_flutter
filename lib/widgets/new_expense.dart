@@ -16,6 +16,8 @@ class _NewExpenseState extends State<NewExpense> {
   final _amountController = TextEditingController();
   DateTime? _selectedDate;
 
+  Category _selectedCategory = Category.leisure;
+
   void _presentDatePicker() async {
     final now = DateTime.now();
     final firstDate = DateTime(now.year - 1, now.month - 1);
@@ -27,6 +29,36 @@ class _NewExpenseState extends State<NewExpense> {
     setState(() {
       _selectedDate = pickedDate;
     });
+  }
+
+  void _submitExpenseData() {
+    final enteredAmount = double.tryParse(
+      _amountController.text.replaceAll(',', '.'),
+    );
+    final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
+    if (_titleController.text.trim().isEmpty ||
+        amountIsInvalid ||
+        _selectedDate == null) {
+      showDialog(
+        context: context,
+        builder:
+            (ctx) => AlertDialog(
+              title: Text('Campos inválidos'),
+              content: const Text(
+                'Favor certificar-se que os campos de título, valor e categoria foram informados.',
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                  },
+                  child: Text('Voltar'),
+                ),
+              ],
+            ),
+      );
+      return;
+    }
   }
 
   @override
@@ -89,6 +121,7 @@ class _NewExpenseState extends State<NewExpense> {
             children: [
               Text('Tipo da despesa:'),
               DropdownButton(
+                value: _selectedCategory,
                 items:
                     Category.values
                         .map(
@@ -98,7 +131,14 @@ class _NewExpenseState extends State<NewExpense> {
                           ),
                         )
                         .toList(),
-                onChanged: (value) {},
+                onChanged: (value) {
+                  if (value == null) {
+                    return;
+                  }
+                  setState(() {
+                    _selectedCategory = value;
+                  });
+                },
               ),
             ],
           ),
@@ -110,10 +150,7 @@ class _NewExpenseState extends State<NewExpense> {
                   backgroundColor: Theme.of(context).primaryColor,
                   foregroundColor: Colors.white,
                 ),
-                onPressed: () {
-                  print(_titleController.text);
-                  print(_amountController.text);
-                },
+                onPressed: _submitExpenseData,
                 child: Text('Registrar despesa'),
               ),
               ElevatedButton(
