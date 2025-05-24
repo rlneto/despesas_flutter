@@ -1,3 +1,5 @@
-# despesas_flutter
+# Gerenciador de Despesas (Flutter)
 
-A new Flutter project.
+## Descrição
+
+Aplicação para inclusão e relação de despesas pessoais, desenvolvida em Flutter.
