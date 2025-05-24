@@ -1,3 +1,4 @@
+import 'package:despesas_flutter/widgets/expenses_list/expenses_list.dart';
 import 'package:flutter/material.dart';
 import 'package:despesas_flutter/models/expense.dart';
 
@@ -35,7 +36,12 @@ class _ExpensesState extends State<Expenses> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(children: [Text('Relatório'), Text("Despesas vão aqui")]),
+      body: Column(
+        children: [
+          Text('Relatório'),
+          Expanded(child: ExpensesList(expenses: _registeredExpenses)),
+        ],
+      ),
     );
   }
 }
