@@ -52,10 +52,22 @@ class _ExpensesState extends State<Expenses> {
     setState(() {
       _registeredExpenses.remove(expense);
     });
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Despesa excluída com sucesso!')));
   }
 
   @override
   Widget build(BuildContext context) {
+    Widget mainContent = Center(child: Text('Nenhuma despesa registrada.'));
+
+    if (_registeredExpenses.isNotEmpty) {
+      mainContent = ExpensesList(
+        expenses: _registeredExpenses,
+        onRemoveExpense: _removeExpense,
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text("Gerenciador de Despesas"),
@@ -64,15 +76,7 @@ class _ExpensesState extends State<Expenses> {
         ],
       ),
       body: Column(
-        children: [
-          Text('Relatório'),
-          Expanded(
-            child: ExpensesList(
-              expenses: _registeredExpenses,
-              onRemoveExpense: _removeExpense,
-            ),
-          ),
-        ],
+        children: [Text('Relatório de despesas'), Expanded(child: mainContent)],
       ),
     );
   }
