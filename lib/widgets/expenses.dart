@@ -14,7 +14,7 @@ class Expenses extends StatefulWidget {
 
 class _ExpensesState extends State<Expenses> {
   final List<Expense> _registeredExpenses = [
-    Expense(
+    /*     Expense(
       title: 'Lanche',
       amount: 42.00,
       date: DateTime.now(),
@@ -31,11 +31,27 @@ class _ExpensesState extends State<Expenses> {
       amount: 44.00,
       date: DateTime.now(),
       category: Category.travel,
-    ),
+    ), */
   ];
 
+  void _addExpense(Expense expense) {
+    setState(() {
+      _registeredExpenses.add(expense);
+    });
+  }
+
   void _openAddExpenseOverlay() {
-    showModalBottomSheet(context: context, builder: (ctx) => NewExpense());
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (ctx) => NewExpense(onAddExpense: _addExpense),
+    );
+  }
+
+  void _removeExpense(Expense expense) {
+    setState(() {
+      _registeredExpenses.remove(expense);
+    });
   }
 
   @override
@@ -50,7 +66,12 @@ class _ExpensesState extends State<Expenses> {
       body: Column(
         children: [
           Text('Relatório'),
-          Expanded(child: ExpensesList(expenses: _registeredExpenses)),
+          Expanded(
+            child: ExpensesList(
+              expenses: _registeredExpenses,
+              onRemoveExpense: _removeExpense,
+            ),
+          ),
         ],
       ),
     );
