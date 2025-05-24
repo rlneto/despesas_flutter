@@ -6,14 +6,6 @@ class ExpenseItem extends StatelessWidget {
 
   final Expense expense;
 
-  String categoryConverter(cat) {
-    if (cat == Category.food) {
-      return "Comida";
-    } else {
-      return "Outros";
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -37,9 +29,12 @@ class ExpenseItem extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.payment),
+                        Icon(
+                          categoryIcons[expense.category] ??
+                              Icons.question_mark,
+                        ),
                         const SizedBox(width: 8),
-                        Text(categoryConverter(expense.category)),
+                        Text(categoryNames[expense.category] ?? "Outros"),
                       ],
                     ),
                     Row(
