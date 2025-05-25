@@ -70,6 +70,7 @@ class _ExpensesState extends State<Expenses> {
     }
     return Scaffold(
       appBar: AppBar(
+        actionsPadding: EdgeInsets.fromLTRB(0, 0, 24, 0),
         title: Text("Gerenciador de Despesas"),
         actions: [
           IconButton(onPressed: _openAddExpenseOverlay, icon: Icon(Icons.add)),
