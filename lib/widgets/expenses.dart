@@ -14,26 +14,7 @@ class Expenses extends StatefulWidget {
 }
 
 class _ExpensesState extends State<Expenses> {
-  final List<Expense> _registeredExpenses = [
-    /*     Expense(
-      title: 'Lanche',
-      amount: 42.00,
-      date: DateTime.now(),
-      category: Category.food,
-    ),
-    Expense(
-      title: 'Filme',
-      amount: 43.00,
-      date: DateTime.now(),
-      category: Category.leisure,
-    ),
-    Expense(
-      title: 'Passeio',
-      amount: 44.00,
-      date: DateTime.now(),
-      category: Category.travel,
-    ), */
-  ];
+  final List<Expense> _registeredExpenses = [];
 
   void _addExpense(Expense expense) {
     setState(() {
@@ -43,6 +24,7 @@ class _ExpensesState extends State<Expenses> {
 
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
+      useSafeArea: true,
       isScrollControlled: true,
       context: context,
       builder: (ctx) => NewExpense(onAddExpense: _addExpense),
@@ -61,7 +43,14 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
     Widget mainContent = Center(child: Text('Nenhuma despesa registrada.'));
+
+    List<Widget> corpo = [
+      Expanded(child: Chart(expenses: _registeredExpenses)),
+      Expanded(child: mainContent),
+    ];
 
     if (_registeredExpenses.isNotEmpty) {
       mainContent = ExpensesList(
@@ -77,12 +66,7 @@ class _ExpensesState extends State<Expenses> {
           IconButton(onPressed: _openAddExpenseOverlay, icon: Icon(Icons.add)),
         ],
       ),
-      body: Column(
-        children: [
-          Chart(expenses: _registeredExpenses),
-          Expanded(child: mainContent),
-        ],
-      ),
+      body: width < 600 ? Column(children: corpo) : Row(children: corpo),
     );
   }
 }

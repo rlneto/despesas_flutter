@@ -84,98 +84,104 @@ class _NewExpenseState extends State<NewExpense> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(16, 48, 16, 16),
-      child: Column(
-        spacing: 10,
-        children: [
-          TextField(
-            controller: _titleController,
-            decoration: InputDecoration(label: Text('Título da despesa')),
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  controller: _amountController,
-                  decoration: InputDecoration(
-                    suffixText: ' R\$',
-                    label: Text('Valor'),
-                  ),
-                ),
-              ),
-              SizedBox(width: 16),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      _selectedDate == null
-                          ? 'MM/DD/AAAA'
-                          : formatter.format(_selectedDate!),
-                    ),
-                    ElevatedButton(
-                      onPressed: _presentDatePicker,
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.all(12),
-                        shape: CircleBorder(),
-                        elevation: 2,
-                      ),
-                      child: Icon(Icons.calendar_month),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          Row(
-            spacing: 20,
-            children: [
-              Text('Tipo da despesa:'),
-              DropdownButton(
-                value: _selectedCategory,
-                items:
-                    Category.values
-                        .map(
-                          (category) => DropdownMenuItem(
-                            value: category,
-                            child: Text(categoryNames[category]!),
-                          ),
-                        )
-                        .toList(),
-                onChanged: (value) {
-                  if (value == null) {
-                    return;
-                  }
-                  setState(() {
-                    _selectedCategory = value;
-                  });
-                },
-              ),
-            ],
-          ),
-          Row(
+    final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
+    return SizedBox(
+      height: double.infinity,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(16, 16, 16, keyboardSpace + 16),
+          child: Column(
             spacing: 10,
             children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).primaryColor,
-                  foregroundColor: Colors.white,
-                ),
-                onPressed: _submitExpenseData,
-                child: Text('Registrar despesa'),
+              TextField(
+                controller: _titleController,
+                decoration: InputDecoration(label: Text('Título da despesa')),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Cancelar'),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      controller: _amountController,
+                      decoration: InputDecoration(
+                        suffixText: ' R\$',
+                        label: Text('Valor'),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 16),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          _selectedDate == null
+                              ? 'MM/DD/AAAA'
+                              : formatter.format(_selectedDate!),
+                        ),
+                        ElevatedButton(
+                          onPressed: _presentDatePicker,
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.all(12),
+                            shape: CircleBorder(),
+                            elevation: 2,
+                          ),
+                          child: Icon(Icons.calendar_month),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                spacing: 20,
+                children: [
+                  Text('Tipo da despesa:'),
+                  DropdownButton(
+                    value: _selectedCategory,
+                    items:
+                        Category.values
+                            .map(
+                              (category) => DropdownMenuItem(
+                                value: category,
+                                child: Text(categoryNames[category]!),
+                              ),
+                            )
+                            .toList(),
+                    onChanged: (value) {
+                      if (value == null) {
+                        return;
+                      }
+                      setState(() {
+                        _selectedCategory = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              Row(
+                spacing: 10,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: _submitExpenseData,
+                    child: Text('Registrar despesa'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('Cancelar'),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
